@@ -9,5 +9,8 @@ systemLog:
 net:
   port: 27017
   bindIp: 0.0.0.0
-security:
-  authorization: "enabled"
+#replication:
+#  replSetName: ${rs}
+#security:
+#  authorization: "enabled"
+#  keyFile: /etc/mongodb.key

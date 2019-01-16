@@ -1,9 +1,10 @@
 data "template_file" "mongo_config" {
-  template = "${file("${path.module}/mongod.conf.tpl")}"
+  template = "${var.rs == "none" ? file("${path.module}/mongod.conf.tpl") : file("${path.module}/mongod.rs.conf.tpl")}"
 
   vars {
     project      = "${var.project}"
     zone         = "${var.zone}"
+    rs           = "${var.rs}"
   }
 }
 
@@ -19,11 +20,24 @@ resource "google_compute_image" "mongodb-image" {
 
 }
 
+resource "tls_private_key" "mongo_key" {
+  algorithm = "RSA"
+  rsa_bits  = 756
+}
+
+resource "google_compute_disk" "mongo_data_disk" {
+  name  = "${var.instance_name}-${count.index}-persistent-data"
+  type  = "pd-standard"
+  size  = "${var.data_disk_gb}"
+  zone  = "${var.zone}"
+  count = "${var.count}"
+}
+
 resource "google_compute_instance" "mongo_instance" {
   name         = "${var.instance_name}-${count.index}"
-  machine_type = "n1-standard-1"
+  machine_type = "${var.machine_type}"
   zone         = "${var.zone}"
-  count        = "${var.node_count}"
+  count        = "${var.count}"
 
   tags = ["mongo", "mongodb"]
 
@@ -31,9 +45,13 @@ resource "google_compute_instance" "mongo_instance" {
   boot_disk {
     initialize_params {
       image = "${google_compute_image.mongodb-image.self_link}"
-      type = "pd-ssd"
-      size = "30"
+      type = "pd-standard"
+      size = "10"
     }
+  }
+  attached_disk {
+    source = "${var.instance_name}-${count.index}-persistent-data"
+    device_name = "mongopd"
   }
 
   network_interface {
@@ -67,6 +85,30 @@ resource "google_compute_instance" "mongo_instance" {
     }
   }
 
+  provisioner "file" {
+    content      = "${base64encode(tls_private_key.mongo_key.private_key_pem)}"
+    destination = "/tmp/mongodb.key"
+
+    connection {
+      type        = "ssh"
+      user        = "devops"
+      private_key = "${tls_private_key.provision_key.private_key_pem}"
+      agent       = false
+    }
+  }
+
+  provisioner "file" {
+    source      = "mongodb/bootstrap.sh"
+    destination = "/tmp/bootstrap.sh"
+
+    connection {
+      type        = "ssh"
+      user        = "devops"
+      private_key = "${tls_private_key.provision_key.private_key_pem}"
+      agent       = false
+    }
+  }
+
   provisioner "remote-exec" {
     connection {
       type        = "ssh"
@@ -74,17 +116,18 @@ resource "google_compute_instance" "mongo_instance" {
       private_key = "${tls_private_key.provision_key.private_key_pem}"
       agent       = false
     }
-
     inline = [
-      "sudo mv /tmp/mongod.conf /etc",
-      "sudo systemctl start mongod.service"
+      "chmod +x /tmp/bootstrap.sh",
+      "/tmp/bootstrap.sh > /tmp/bootstrap",
     ]
   }
   //not sure if ok for production
   allow_stopping_for_update = false
+
+  depends_on = ["google_compute_disk.mongo_data_disk"]
  }
 
- resource "tls_private_key" "provision_key" {
+resource "tls_private_key" "provision_key" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
