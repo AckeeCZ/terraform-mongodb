@@ -17,5 +17,8 @@ https://github.com/AckeeDevOps/terraform-mongodb/blob/master/variables.tf explan
 * zone - zone of GCP project
 * instance_name - base for GCE instances name
 * cluster_ipv4_cidr - IPv4 CIDR of GKE cluster - for firewall rule setting
-* node_count:1 - number of MongoDB nodes to deploy
-* raw_image_source -  URL of tar archive containing RAW source for MongoDB image
+* count:1 - number of MongoDB nodes to deploy
+* machine_type:n1-standard-1 - type of instance to deploy to
+* raw_image_source - URL of tar archive containing RAW source for MongoDB image
+* rs:none - name of Replica Set. Leave default to not setup Replica Set
+* data_disk_gb:30 - size of persistent data disk, in GB - it will be mounted on /var/lib/mongodb and formatted as XFS
