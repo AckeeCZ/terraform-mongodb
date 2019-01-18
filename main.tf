@@ -98,7 +98,7 @@ resource "google_compute_instance" "mongo_instance" {
   }
 
   provisioner "file" {
-    source      = "mongodb/bootstrap.sh"
+    source      = "bootstrap.sh"
     destination = "/tmp/bootstrap.sh"
 
     connection {
