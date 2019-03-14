@@ -1,9 +1,9 @@
 # Ackee GCE Mongodb Terraform module
 
-This module is primary written for provisioning of GCE instance from our Mongodb image (https://github.com/AckeeDevOps/packer-mongodb)
+This module is primary written for provisioning of GCE instance from our Mongodb image (https://github.com/AckeeCZ/packer-mongodb)
 
 It does a few things :
-* Downloads RAW disk from GCS and create an image from it. (you can generate your own image with Packer using https://github.com/AckeeDevOps/packer-mongodb)
+* Downloads RAW disk from GCS and create an image from it. (you can generate your own image with Packer using https://github.com/AckeeCZ/packer-mongodb)
 * Create SSH key for instance provisioning
 * Provision MongoDB config on GCE instance
 * Create (GCP) firewall rules so GKE pods can reach GCE MongoDB instances
@@ -11,7 +11,7 @@ It does a few things :
 
 ## Configuration
 
-https://github.com/AckeeDevOps/terraform-mongodb/blob/master/variables.tf explanation  (followed by default values if applicable) :
+https://github.com/AckeeCZ/terraform-mongodb/blob/master/variables.tf explanation  (followed by default values if applicable) :
 
 * project - name of GCP project
 * zone - zone of GCP project
@@ -27,7 +27,7 @@ https://github.com/AckeeDevOps/terraform-mongodb/blob/master/variables.tf explan
 
 ```hcl
 module "mongodb-prod" {
-  source = "github.com/AckeeDevOps/terraform-mongodb?ref=v1.0.0"
+  source = "github.com/AckeeCZ/terraform-mongodb?ref=v1.0.0"
   project = "my-gcp-project"
   zone = "europe-west3-c"
   instance_name = "mongodb-prod"
