@@ -9,7 +9,7 @@ data "template_file" "mongo_config" {
 }
 
 resource "google_compute_image" "mongodb-image" {
-  name = "mongodb-image"
+  name = "${var.instance_name}-mongodb-image"
 
   raw_disk {
     source = "${var.raw_image_source}"
