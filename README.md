@@ -22,6 +22,7 @@ https://github.com/AckeeCZ/terraform-mongodb/blob/master/variables.tf explanatio
 * raw_image_source - URL of tar archive containing RAW source for MongoDB image (you can use Packer image template to generate image, as mentioned above)
 * rs:none - name of Replica Set. Leave default to not setup Replica Set
 * data_disk_gb:30 - size of persistent data disk, in GB - it will be mounted on /var/lib/mongodb and formatted as XFS
+* data_disk_type:pd-standard - type of persistent data disk - pd-standard or pd-ssd
 
 ## Usage
 

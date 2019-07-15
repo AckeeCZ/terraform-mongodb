@@ -27,7 +27,7 @@ resource "tls_private_key" "mongo_key" {
 
 resource "google_compute_disk" "mongo_data_disk" {
   name  = "${var.instance_name}-${count.index}-persistent-data"
-  type  = "pd-standard"
+  type  = "${var.data_disk_type}"
   size  = "${var.data_disk_gb}"
   zone  = "${var.zone}"
   count = "${var.count}"

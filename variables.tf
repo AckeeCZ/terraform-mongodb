@@ -16,3 +16,7 @@ variable "rs" {
 variable "data_disk_gb" {
   default = "30"
 }
+
+variable "data_disk_type" {
+  default = "pd-standard"
+}
