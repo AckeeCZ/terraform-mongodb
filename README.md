@@ -17,7 +17,7 @@ https://github.com/AckeeCZ/terraform-mongodb/blob/master/variables.tf explanatio
 * zone - zone of GCP project
 * instance_name - base for GCE instances name
 * cluster_ipv4_cidr - IPv4 CIDR of GKE cluster - for firewall rule setting
-* count:1 - number of MongoDB nodes to deploy
+* instance_count:1 - number of MongoDB nodes to deploy
 * machine_type:n1-standard-1 - type of instance to deploy to
 * raw_image_source - URL of tar archive containing RAW source for MongoDB image (you can use Packer image template to generate image, as mentioned above)
 * rs:none - name of Replica Set. Leave default to not setup Replica Set
@@ -33,7 +33,7 @@ module "mongodb-prod" {
   zone = "europe-west3-c"
   instance_name = "mongodb-prod"
   cluster_ipv4_cidr = "10.123.0.0/14"
-  count = "3"
+  instance_count = "3"
   raw_image_source = "https://storage.googleapis.com/image-bucket/ackee-mongodb3.4-disk-latest.tar.gz"
   rs = "prod"
 }
