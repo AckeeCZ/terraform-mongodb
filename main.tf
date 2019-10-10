@@ -30,14 +30,14 @@ resource "google_compute_disk" "mongo_data_disk" {
   type  = "${var.data_disk_type}"
   size  = "${var.data_disk_gb}"
   zone  = "${var.zone}"
-  count = "${var.instance_count}"
+  count = "${var.node_count}"
 }
 
 resource "google_compute_instance" "mongo_instance" {
   name         = "${var.instance_name}-${count.index}"
   machine_type = "${var.machine_type}"
   zone         = "${var.zone}"
-  count        = "${var.instance_count}"
+  count        = "${var.node_count}"
 
   tags = ["mongo", "mongodb"]
 

@@ -3,7 +3,7 @@ variable "zone" {}
 variable "instance_name" {}
 variable "cluster_ipv4_cidr" {}
 
-variable "instance_count" {
+variable "node_count" {
   default = "1"
 }
 variable "machine_type" {
