@@ -144,7 +144,8 @@ resource "google_compute_firewall" "mongodb-allow-cluster" {
     protocol = "tcp"
     ports    = ["27017"]
   }
+
   source_ranges = [var.cluster_ipv4_cidr]
-  source_tags   = ["mongodb"]
+  target_tags   = ["mongodb"]
 }
 
